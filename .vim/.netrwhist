@@ -1,0 +1,3 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_1='/home/box/Code/Kernel/linux-2.6.37-psp04.04.00.01-gx3/.tmp_versions'

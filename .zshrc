@@ -120,9 +120,9 @@ alias grii='grep -RIi'
 alias griil='grep -RIil'
 
 
-alias gotodpict='cd ~/depot/dpict/'
-alias gotosony='cd ~/depot/dpict/devices/dm8168/linux_arm/src/gx3/sonyblock_devel'
-alias gotofs='cd /tools/GX3FS/ROOTFS'
+alias dpict='cd ~/depot/dpict/'
+alias sony='cd ~/depot/dpict/devices/dm8168/linux_arm/src/gx3/sonyblock_devel'
+alias fs='cd /tools/GX3FS/ROOTFS'
 
 alias myshare='sudo mount -t cifs -o username=cgaines //winsrv/cgaines ~/MyShare'
 
@@ -132,6 +132,7 @@ alias usb0='sudo screen /dev/ttyUSB0 115200'
 alias usb1='sudo screen /dev/ttyUSB1 115200'
 
 alias mmi='make && make install'
+alias mci='make clean && make && make install'
 alias gotokern='cd /home/box/Code/Kernel/linux-2.6.37-psp04.04.00.01-gx3'
 alias makekern='CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm INSTALL_MOD_PATH=/tools/GX3FS/ROOTFS/ make '
 alias buildkern='makekern && makekern uImage'

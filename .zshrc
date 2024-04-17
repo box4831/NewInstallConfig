@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$PATH
 
 # Path to your oh-my-zsh installation.
   export ZSH=/home/box/.oh-my-zsh
@@ -8,7 +8,9 @@
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="gnzh"
-ZSH_THEME=rkj-box
+ZSH_THEME=rkj-box   # what im currently using
+#ZSH_THEME=amuse
+#ZSH_THEME=avit
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
 
@@ -50,6 +52,7 @@ CASE_SENSITIVE="true"
 # ignore ctrl-d closing the shell (mostly due to vim)
 #export IGNOREEOF=5
 set -o ignoreeof 5
+set -o vi
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -109,16 +112,26 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias lh='ls -lh'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # grep shorthands
-alias gril='grep -RIl --exclude-dir=.svn'
-alias grii='grep -RIi'
-alias griil='grep -RIil'
+alias gri='grep -RIs --exclude-dir=.svn'
+alias gril='grep -RIls --exclude-dir=.svn'
+alias grii='grep -RIis'
+alias griil='grep -RIils'
+alias grin='grep -RIns'
+alias griin='grep -RIins'
 
+# start a new tmux with a title 
+alias ttmux='tmux new -s'
+# detach/resume a tmux session
+alias remux='tmux a -d -t'
+# list sessions
+alias lsmux='tmux list-sessions'
 
 alias dpict='cd ~/depot/dpict/'
 alias sony='cd ~/depot/dpict/devices/dm8168/linux_arm/src/gx3/sonyblock_devel'
@@ -137,12 +150,30 @@ alias gotokern='cd /home/box/Code/Kernel/linux-2.6.37-psp04.04.00.01-gx3'
 alias makekern='CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm INSTALL_MOD_PATH=/tools/GX3FS/ROOTFS/ make '
 alias buildkern='makekern && makekern uImage'
 
+alias v='vim'
+alias HUP='kill -HUP'
 
 alias ff='find . -name '
 alias ffi='find . -iname '
 
+# setup for qualcomm dev (build system wants bash)
+alias qbash='SHELL=/bin/bash /bin/bash'
+alias qdeploy='cd ~/I/poky/build/tmp-glibc/deploy/images/apq8053'
+alias qpush='adb push /code/ReferenceFiles/DebugScripts/* /var/run; adb push ~/I/work/gtest/gtest/bin/* /var/run'
+alias qgrep='grep -RIs --exclude-dir=poky --exclude-dir=build'
+alias qgril='qgrep -l'
+alias qgrin='grep -RIns --exclude-dir=poky --exclude-dir=build --exclude-dir=.svn'
+alias loglast='echo `!!` >> '
+function qssh {
+	 ssh-keygen -f "/home/box/.ssh/known_hosts" -R 10.1.0.$1
+	 ssh -o "StrictHostKeyChecking no" root@10.1.0.$1
+ }
 # shorthand apt commands
 alias gimme='sudo apt install'
 alias dontwant='sudo apt remove'
+# git shortcuts
+alias gits='git status'
+# area screenshot
+alias screeny='gnome-screenshot -a -f ~/screeny.jpg'
 # history sharing is BS
 setopt no_share_history

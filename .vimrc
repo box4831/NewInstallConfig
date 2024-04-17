@@ -3,13 +3,28 @@ set autoindent
 set smartindent
 set tabstop=4
 set shiftwidth=4
+set expandtab
+
+filetype off
 
 set showmatch
-set tags=/home/gaines/workspace/Gemini/cable/trunk/platform/tags
 set ruler
 "set nohls
 
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+" put other plugins here
+"Plugin 'itchyny/lightline.vim'
+Plugin 'Syntastic.vim'
+
+call vundle#end()
+filetype plugin indent on
+
 syntax on
+"colorscheme darkblue
+colorscheme desert
 
 set history=50
 
@@ -19,7 +34,6 @@ set history=50
 set nomodeline
 
 "set timeoutlen=10
-colorscheme darkblue
 
 " turn off backgorund
 hi Normal ctermbg=none
@@ -42,6 +56,9 @@ set title
 " set path to current dir to :Explore any file (or :find or :sfind)
 set path=$PWD/**
 
+" turn off that obnoxious auto-comment
+set formatoptions-=cro
+
 " hit F5 to show a list of buffers and select one
 
 nnoremap <F5> :buffers<CR>:buffer<Space>
@@ -54,12 +71,17 @@ nmap ;l :b#<CR>
 "nmap ;m :!make<CR>
 nmap ;m :!clear; make
 nmap ;M :!clear; make && make install
+nmap ;i :make install<CR>
+nmap ;C :!clear; make clean && make && make install
+nmap ;c :!clear; make clean
 nmap ;J :%!python -m json.tool<CR>
 nmap ;t :TagbarToggle<CR>
 nmap ;e :Explore **/
 nmap ;S :'<,'>s/\([^"]\+\)"\([^"]\+\)"\(.*\)/\1XX_\2\3
 nmap ;L :put ='std::cout << __FUNCTION__ << '<CR>
 nmap ;E :put ='std::cerr << __FUNCTION__ << '<CR>
+
+imap jj <ESC>
 
 
 " no longer need to hit ctrl-w to move around panes
@@ -82,6 +104,16 @@ set wildcharm=<C-Z>
 
 set hidden
 
+
+" Generate a block comment 
+function MakeBlockComment()
+    put ='/******************************************************************************'
+	put ='*'
+    put ='******************************************************************************/'
+endfunction
+
+
+command BlockComment :call MakeBlockComment()
 
 " Generates a function header.  Parameter is the name of the function
 " (or anything you want really)
@@ -134,7 +166,14 @@ endfunction
 
 command -nargs=+ AllReplace :call DoReplace(<f-args>)
 
-" Generate a file header
+function MakeInclude(inc)
+	put ='#include <' . a:inc . '.h>'
+endfunction
+
+
+command -nargs=+ I :call MakeInclude(<f-args>)
+
+" TODO Generate a file header
 
 function OpenRelatedFile()
     " see if end of file name is header (.h) or source (.cpp or .c)
@@ -144,7 +183,7 @@ function OpenRelatedFile()
     let s:rest = strpart(s:fname, 0, strlen(s:fname) - strlen(s:ext))
     let s:canOpen = 0
 
-    if (s:ext == ".c" || s:ext == ".cpp")
+    if (s:ext == ".c" || s:ext == ".cpp" || s:ext == ".cc")
         let s:ext = ".h"
         let s:fname = s:rest . s:ext
         let s:canOpen = filereadable(s:fname)
@@ -162,7 +201,12 @@ function OpenRelatedFile()
             let s:ext = ".c"
             let s:fname = s:rest . s:ext
             let s:canOpen = filereadable(s:fname)
-        endif
+		endif
+		if (s:canOpen == 0)
+			let s:ext = ".cc"
+			let s:fname = s:rest . s:ext
+			let s:canOpen = filereadable(s:fname)
+		endif
     endif
 
     " attempt to open
